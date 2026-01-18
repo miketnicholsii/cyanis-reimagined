@@ -51,6 +51,7 @@ export default {
         navy: {
           DEFAULT: "hsl(var(--navy))",
           light: "hsl(var(--navy-light))",
+          dark: "hsl(var(--navy-dark))",
         },
         cyan: {
           DEFAULT: "hsl(var(--cyan))",
@@ -75,7 +76,8 @@ export default {
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
-        display: ['Inter', 'system-ui', 'sans-serif'],
+        display: ['Space Grotesk', 'Inter', 'system-ui', 'sans-serif'],
+        mono: ['JetBrains Mono', 'monospace'],
       },
       keyframes: {
         "accordion-down": {
@@ -107,12 +109,64 @@ export default {
           "100%": { opacity: "1", transform: "scale(1)" },
         },
         "float": {
-          "0%, 100%": { transform: "translateY(0)" },
-          "50%": { transform: "translateY(-10px)" },
+          "0%, 100%": { transform: "translateY(0) rotate(0deg)" },
+          "25%": { transform: "translateY(-8px) rotate(1deg)" },
+          "50%": { transform: "translateY(-15px) rotate(0deg)" },
+          "75%": { transform: "translateY(-8px) rotate(-1deg)" },
+        },
+        "float-slow": {
+          "0%, 100%": { transform: "translateY(0) translateX(0)" },
+          "50%": { transform: "translateY(-20px) translateX(10px)" },
         },
         "pulse-glow": {
           "0%, 100%": { boxShadow: "0 0 20px hsl(var(--cyan) / 0.3)" },
           "50%": { boxShadow: "0 0 40px hsl(var(--cyan) / 0.6)" },
+        },
+        "shimmer": {
+          "0%": { backgroundPosition: "-200% 0" },
+          "100%": { backgroundPosition: "200% 0" },
+        },
+        "scan": {
+          "0%": { transform: "translateY(-100%)", opacity: "0" },
+          "50%": { opacity: "1" },
+          "100%": { transform: "translateY(100%)", opacity: "0" },
+        },
+        "radar": {
+          "0%": { transform: "rotate(0deg)" },
+          "100%": { transform: "rotate(360deg)" },
+        },
+        "ping-slow": {
+          "0%": { transform: "scale(1)", opacity: "1" },
+          "75%, 100%": { transform: "scale(2)", opacity: "0" },
+        },
+        "grid-pulse": {
+          "0%, 100%": { opacity: "0.3" },
+          "50%": { opacity: "0.6" },
+        },
+        "drone-hover": {
+          "0%, 100%": { transform: "translateY(0) rotate(-2deg)" },
+          "50%": { transform: "translateY(-12px) rotate(2deg)" },
+        },
+        "text-reveal": {
+          "0%": { opacity: "0", transform: "translateY(100%)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        "border-flow": {
+          "0%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
+          "100%": { backgroundPosition: "0% 50%" },
+        },
+        "glow-pulse": {
+          "0%, 100%": { 
+            boxShadow: "0 0 5px hsl(var(--cyan) / 0.5), 0 0 20px hsl(var(--cyan) / 0.3), 0 0 40px hsl(var(--cyan) / 0.1)" 
+          },
+          "50%": { 
+            boxShadow: "0 0 10px hsl(var(--cyan) / 0.8), 0 0 40px hsl(var(--cyan) / 0.5), 0 0 80px hsl(var(--cyan) / 0.3)" 
+          },
+        },
+        "counter": {
+          "0%": { opacity: "0", transform: "translateY(20px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
         },
       },
       animation: {
@@ -124,7 +178,23 @@ export default {
         "slide-in-right": "slide-in-right 0.6s ease-out forwards",
         "scale-in": "scale-in 0.5s ease-out forwards",
         "float": "float 6s ease-in-out infinite",
+        "float-slow": "float-slow 8s ease-in-out infinite",
         "pulse-glow": "pulse-glow 3s ease-in-out infinite",
+        "shimmer": "shimmer 3s linear infinite",
+        "scan": "scan 3s ease-in-out infinite",
+        "radar": "radar 4s linear infinite",
+        "ping-slow": "ping-slow 2s cubic-bezier(0, 0, 0.2, 1) infinite",
+        "grid-pulse": "grid-pulse 4s ease-in-out infinite",
+        "drone-hover": "drone-hover 4s ease-in-out infinite",
+        "text-reveal": "text-reveal 0.8s ease-out forwards",
+        "border-flow": "border-flow 3s ease infinite",
+        "glow-pulse": "glow-pulse 2s ease-in-out infinite",
+        "counter": "counter 0.5s ease-out forwards",
+      },
+      backgroundImage: {
+        'grid-pattern': 'linear-gradient(to right, hsl(var(--cyan) / 0.1) 1px, transparent 1px), linear-gradient(to bottom, hsl(var(--cyan) / 0.1) 1px, transparent 1px)',
+        'radial-glow': 'radial-gradient(circle at center, hsl(var(--cyan) / 0.15) 0%, transparent 70%)',
+        'hero-gradient': 'linear-gradient(135deg, hsl(var(--navy-dark)) 0%, hsl(var(--navy)) 50%, hsl(var(--navy-dark)) 100%)',
       },
     },
   },
