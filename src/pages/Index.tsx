@@ -1,360 +1,418 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '@/components/layout/Layout';
 import Hero from '@/components/Hero';
-import ServiceCard from '@/components/ServiceCard';
-import StatCard from '@/components/StatCard';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 import { 
   Box, 
   Map, 
   Search, 
-  DollarSign, 
+  Leaf, 
   ArrowRight,
+  Building2,
+  Factory,
+  Tractor,
+  Home,
+  Zap,
+  Play,
+  CheckCircle2,
+  ChevronRight,
   Shield,
   Clock,
-  Award,
-  Target,
-  Cpu,
-  Radio
+  Award
 } from 'lucide-react';
 
-const services = [
+// Industry cards data
+const industries = [
   {
-    icon: Box,
-    title: '3D Modeling',
-    description: 'Create detailed 3D models of structures, terrain, and assets with photogrammetry technology.',
-    features: ['High-resolution models', 'CAD-ready exports', 'Virtual tours'],
+    icon: Building2,
+    title: 'Construction',
+    description: 'Track progress, measure volumes, and document sites with precision aerial data.',
+    image: 'https://images.pexels.com/photos/1216589/pexels-photo-1216589.jpeg?auto=compress&cs=tinysrgb&w=600',
   },
   {
-    icon: Map,
-    title: 'Precision Mapping',
-    description: 'Accurate aerial mapping and surveying for construction, agriculture, and land management.',
-    features: ['Topographic surveys', 'Orthomosaic maps', 'Volume calculations'],
+    icon: Factory,
+    title: 'Energy & Utilities',
+    description: 'Inspect infrastructure safely and efficiently without expensive equipment.',
+    image: 'https://images.pexels.com/photos/256381/pexels-photo-256381.jpeg?auto=compress&cs=tinysrgb&w=600',
   },
   {
-    icon: Search,
-    title: 'Aerial Inspections',
-    description: 'Safe and efficient infrastructure inspections without scaffolding or manned aircraft.',
-    features: ['Roof inspections', 'Power line surveys', 'Cell tower audits'],
+    icon: Tractor,
+    title: 'Agriculture',
+    description: 'Monitor crop health, plan irrigation, and maximize yields with aerial insights.',
+    image: 'https://images.pexels.com/photos/2132180/pexels-photo-2132180.jpeg?auto=compress&cs=tinysrgb&w=600',
   },
   {
-    icon: DollarSign,
-    title: 'Cost-Effective Solutions',
-    description: 'Reduce project costs and timelines with efficient drone-based data collection.',
-    features: ['50% cost savings', 'Faster turnaround', 'Detailed reports'],
+    icon: Home,
+    title: 'Real Estate',
+    description: 'Create stunning property visuals and 3D tours that sell faster.',
+    image: 'https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=600',
   },
 ];
 
-const features = [
-  {
-    icon: Shield,
-    title: 'Fully Certified & Insured',
-    description: 'FAA Part 107 certified pilots with comprehensive liability coverage for every mission.',
-  },
-  {
-    icon: Clock,
-    title: 'Rapid Turnaround',
-    description: 'Most projects completed and delivered within 24 hours, with rush options available.',
-  },
-  {
-    icon: Award,
-    title: 'Industry Expertise',
-    description: 'Experience across construction, agriculture, energy, and real estate sectors.',
-  },
+// Services data
+const services = [
+  { icon: Box, title: '3D Modeling', description: 'Photogrammetry and point cloud generation' },
+  { icon: Map, title: 'Mapping', description: 'Orthomosaic maps and topographic surveys' },
+  { icon: Search, title: 'Inspections', description: 'Infrastructure and asset inspections' },
+  { icon: Leaf, title: 'Agriculture', description: 'Crop health and field analysis' },
+];
+
+// Process tabs
+const processTabs = [
+  { id: 'planning', label: 'Planning', description: 'We analyze your project requirements and create a custom flight plan optimized for your needs.' },
+  { id: 'capture', label: 'Data Capture', description: 'Our FAA-certified pilots capture high-resolution aerial imagery using enterprise-grade drones.' },
+  { id: 'processing', label: 'Processing', description: 'Advanced software processes raw data into actionable deliverables like 3D models and maps.' },
+  { id: 'delivery', label: 'Delivery', description: 'Receive your data within 24 hours in industry-standard formats ready for immediate use.' },
+];
+
+// Trust logos (using text for now)
+const trustLogos = [
+  'Oklahoma DOT', 'Tulsa Metro', 'Devon Energy', 'Williams Companies', 
+  'ONEOK', 'Magellan Midstream', 'Quiktrip', 'BOK Financial'
 ];
 
 const Index = () => {
+  const [activeTab, setActiveTab] = useState('planning');
+
   return (
     <Layout>
-      {/* Hero Section - Compact */}
+      {/* Hero Section */}
       <Hero
-        subtitle="Professional UAS Services"
-        title="Precision Aerial Solutions"
-        description="Cutting-edge drone technology for 3D modeling, mapping, and inspections across Oklahoma."
-        ctaText="Request a Quote"
+        subtitle="Professional Drone Services"
+        title="Reality Capture for the Modern Enterprise"
+        description="From aerial surveys to 3D modeling, we transform complex environments into actionable data. Trusted by Oklahoma's leading companies."
+        ctaText="Book a Demo"
         ctaLink="/contact"
-        secondaryCtaText="Our Services"
+        secondaryCtaText="Watch Demo"
         secondaryCtaLink="/services"
-        compact={true}
       />
 
-      {/* Stats Section with Tech Grid */}
-      <section className="py-20 bg-gradient-to-b from-background to-secondary/30 relative overflow-hidden">
-        {/* Background Elements */}
-        <div className="absolute inset-0 tech-grid opacity-30" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] radial-glow opacity-50" />
-        
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <StatCard value="100+" label="Projects Completed" />
-            <StatCard value="50%" label="Cost Savings" />
-            <StatCard value="24hr" label="Turnaround Time" />
-            <StatCard value="5★" label="Client Rating" />
+      {/* Trust Logos */}
+      <section className="py-8 border-y border-border bg-secondary/30">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-center gap-12 flex-wrap">
+            <span className="text-sm text-muted-foreground font-medium">Trusted by:</span>
+            <div className="flex items-center gap-10 flex-wrap justify-center">
+              {trustLogos.slice(0, 5).map((logo, index) => (
+                <motion.span
+                  key={logo}
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.05 }}
+                  className="text-muted-foreground/60 font-semibold text-sm hover:text-foreground transition-colors cursor-default"
+                >
+                  {logo}
+                </motion.span>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Services Preview Section */}
-      <section className="py-28 bg-background relative overflow-hidden">
-        {/* Decorative Elements */}
-        <div className="absolute top-20 right-0 w-96 h-96 radial-glow opacity-30" />
-        <div className="absolute bottom-20 left-0 w-64 h-64 radial-glow opacity-20" />
-        
-        <div className="container mx-auto px-4 relative z-10">
-          <motion.div 
+      {/* Industries Section */}
+      <section className="py-24 bg-background">
+        <div className="container mx-auto px-4">
+          <motion.div
             className="text-center mb-16"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <motion.span 
-              className="inline-block px-4 py-1.5 rounded-full bg-cyan/10 text-cyan font-semibold tracking-wide uppercase text-sm mb-4"
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-            >
-              What We Offer
-            </motion.span>
-            <h2 className="text-3xl md:text-5xl font-display font-bold text-foreground mt-3 mb-5">
-              Professional <span className="gradient-text">Drone Services</span>
-            </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto text-lg leading-relaxed">
-              We leverage cutting-edge UAS technology to deliver accurate, safe, and 
-              cost-effective aerial solutions for your business needs.
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {services.map((service, index) => (
-              <ServiceCard key={service.title} {...service} index={index} />
-            ))}
-          </div>
-
-          <motion.div 
-            className="text-center mt-14"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.4 }}
           >
-            <Link to="/services">
-              <Button 
-                size="lg" 
-                variant="outline" 
-                className="border-2 border-cyan/30 text-cyan hover:bg-cyan/10 hover:border-cyan/50 px-8 group"
+            <span className="text-accent font-semibold text-sm uppercase tracking-wider">Industries</span>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-foreground mt-3 mb-4">
+              Solutions for Every Industry
+            </h2>
+            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+              We deliver specialized aerial solutions tailored to the unique challenges of your industry.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {industries.map((industry, index) => (
+              <motion.div
+                key={industry.title}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
               >
-                View All Services
-                <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
-              </Button>
-            </Link>
+                <Link
+                  to="/services"
+                  className="group block clean-card overflow-hidden h-full"
+                >
+                  <div className="aspect-[4/3] overflow-hidden">
+                    <motion.img
+                      src={industry.image}
+                      alt={industry.title}
+                      className="w-full h-full object-cover"
+                      whileHover={{ scale: 1.05 }}
+                      transition={{ duration: 0.4 }}
+                    />
+                  </div>
+                  <div className="p-6">
+                    <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center mb-4 group-hover:bg-accent/20 transition-colors">
+                      <industry.icon className="w-5 h-5 text-accent" />
+                    </div>
+                    <h3 className="text-lg font-display font-semibold text-foreground mb-2 group-hover:text-accent transition-colors">
+                      {industry.title}
+                    </h3>
+                    <p className="text-muted-foreground text-sm leading-relaxed">
+                      {industry.description}
+                    </p>
+                  </div>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Process/Workflow Section with Tabs */}
+      <section className="py-24 bg-secondary/30">
+        <div className="container mx-auto px-4">
+          <motion.div
+            className="text-center mb-12"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <span className="text-accent font-semibold text-sm uppercase tracking-wider">How It Works</span>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-foreground mt-3 mb-4">
+              From Flight to Insight
+            </h2>
+          </motion.div>
+
+          {/* Tabs */}
+          <div className="flex justify-center mb-12">
+            <div className="inline-flex bg-background rounded-xl p-1.5 border border-border shadow-sm">
+              {processTabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`px-6 py-3 rounded-lg text-sm font-medium transition-all ${
+                    activeTab === tab.id
+                      ? 'bg-foreground text-background shadow-sm'
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Tab Content */}
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+            className="max-w-4xl mx-auto"
+          >
+            <div className="grid md:grid-cols-2 gap-12 items-center">
+              <div className="rounded-2xl overflow-hidden bg-muted aspect-video shadow-lg">
+                <img
+                  src={
+                    activeTab === 'planning' 
+                      ? 'https://images.pexels.com/photos/7709020/pexels-photo-7709020.jpeg?auto=compress&cs=tinysrgb&w=800'
+                      : activeTab === 'capture'
+                      ? 'https://images.pexels.com/photos/442587/pexels-photo-442587.jpeg?auto=compress&cs=tinysrgb&w=800'
+                      : activeTab === 'processing'
+                      ? 'https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg?auto=compress&cs=tinysrgb&w=800'
+                      : 'https://images.pexels.com/photos/1310777/pexels-photo-1310777.jpeg?auto=compress&cs=tinysrgb&w=800'
+                  }
+                  alt={activeTab}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div>
+                <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center mb-6">
+                  <span className="text-accent font-display font-bold text-xl">
+                    {processTabs.findIndex(t => t.id === activeTab) + 1}
+                  </span>
+                </div>
+                <h3 className="text-2xl font-display font-bold text-foreground mb-4">
+                  {processTabs.find(t => t.id === activeTab)?.label}
+                </h3>
+                <p className="text-muted-foreground text-lg leading-relaxed mb-6">
+                  {processTabs.find(t => t.id === activeTab)?.description}
+                </p>
+                <Link to="/services">
+                  <Button variant="outline" className="group">
+                    Learn More
+                    <ChevronRight className="ml-1 w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+                  </Button>
+                </Link>
+              </div>
+            </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Why Choose Us Section - Dark Theme */}
-      <section className="py-28 relative overflow-hidden bg-gradient-to-br from-navy-dark via-navy to-navy-dark">
-        {/* Animated Background */}
-        <div className="absolute inset-0">
-          <div className="absolute inset-0 tech-grid opacity-20" />
-          <motion.div
-            className="absolute top-1/4 left-1/4 w-[600px] h-[600px] rounded-full"
-            style={{
-              background: 'radial-gradient(circle, hsl(var(--cyan) / 0.1) 0%, transparent 70%)',
-            }}
-            animate={{
-              scale: [1, 1.2, 1],
-              opacity: [0.3, 0.5, 0.3],
-            }}
-            transition={{
-              duration: 8,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          />
-        </div>
-
-        <div className="container mx-auto px-4 relative z-10">
+      {/* Services Grid */}
+      <section className="py-24 bg-background">
+        <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
-            {/* Left Content */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
             >
-              <span className="inline-block px-4 py-1.5 rounded-full bg-cyan/10 text-cyan font-semibold tracking-wide uppercase text-sm mb-6">
-                Why Cyanis
-              </span>
-              <h2 className="text-3xl md:text-5xl font-display font-bold text-white mt-3 mb-6 leading-tight">
-                Your Trusted Partner in{' '}
-                <span className="gradient-text">Aerial Innovation</span>
+              <span className="text-accent font-semibold text-sm uppercase tracking-wider">Our Services</span>
+              <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground mt-3 mb-6">
+                Complete Aerial Data Solutions
               </h2>
-              <p className="text-white/70 text-lg leading-relaxed mb-10">
-                At Cyanis LLC, we combine FAA-certified expertise with cutting-edge drone 
-                technology to deliver unparalleled aerial services. Our commitment to 
-                safety, precision, and client satisfaction sets us apart.
+              <p className="text-muted-foreground text-lg leading-relaxed mb-8">
+                We offer a comprehensive suite of drone services designed to meet the 
+                diverse needs of modern businesses. From initial capture to final deliverables.
               </p>
 
-              {/* Feature List */}
-              <div className="space-y-6">
-                {features.map((feature, index) => (
+              <div className="grid sm:grid-cols-2 gap-4">
+                {services.map((service, index) => (
                   <motion.div
-                    key={index}
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
+                    key={service.title}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className="flex items-start gap-5 p-5 rounded-xl glass-card border-white/5 group hover:border-cyan/20 transition-all duration-300"
+                    transition={{ delay: index * 0.1 }}
+                    className="p-5 rounded-xl bg-secondary/50 border border-border hover:border-accent/30 transition-all group cursor-pointer"
                   >
-                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-cyan/20 to-cyan/5 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
-                      <feature.icon className="w-7 h-7 text-cyan" />
+                    <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center mb-3 group-hover:bg-accent/20 transition-colors">
+                      <service.icon className="w-5 h-5 text-accent" />
                     </div>
-                    <div>
-                      <h3 className="font-display font-semibold text-lg text-white mb-1.5 group-hover:text-cyan transition-colors">
-                        {feature.title}
-                      </h3>
-                      <p className="text-white/60 leading-relaxed">{feature.description}</p>
-                    </div>
+                    <h3 className="font-semibold text-foreground mb-1 group-hover:text-accent transition-colors">
+                      {service.title}
+                    </h3>
+                    <p className="text-sm text-muted-foreground">{service.description}</p>
                   </motion.div>
                 ))}
               </div>
+
+              <Link to="/services" className="inline-block mt-8">
+                <Button className="bg-accent hover:bg-accent/90 text-accent-foreground btn-glow group">
+                  Explore All Services
+                  <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
+                </Button>
+              </Link>
             </motion.div>
 
-            {/* Right Image & Stats */}
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.2 }}
               className="relative"
             >
-              {/* Main Image */}
-              <div className="relative rounded-2xl overflow-hidden">
+              <div className="rounded-2xl overflow-hidden shadow-2xl">
                 <img
                   src="https://images.pexels.com/photos/724921/pexels-photo-724921.jpeg?auto=compress&cs=tinysrgb&w=800"
-                  alt="Professional drone in flight"
-                  className="w-full h-auto rounded-2xl"
+                  alt="Drone services"
+                  className="w-full aspect-[4/3] object-cover"
                 />
-                {/* Overlay Gradient */}
-                <div className="absolute inset-0 bg-gradient-to-t from-navy-dark/80 via-transparent to-transparent" />
-                
-                {/* Tech Overlay */}
-                <div className="absolute inset-0 tech-grid opacity-30" />
               </div>
-
-              {/* Floating Stats Cards */}
+              
+              {/* Floating card */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.4 }}
-                className="absolute -bottom-8 -left-8 glass-card p-6 rounded-xl border border-cyan/20 shadow-2xl"
+                transition={{ delay: 0.3 }}
+                className="absolute -bottom-8 -left-8 bg-card border border-border rounded-xl p-5 shadow-xl"
               >
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-cyan/20 flex items-center justify-center">
-                    <Target className="w-6 h-6 text-cyan" />
+                  <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
+                    <CheckCircle2 className="w-6 h-6 text-green-600" />
                   </div>
                   <div>
-                    <div className="text-3xl font-display font-bold text-white">10+</div>
-                    <div className="text-sm text-white/60">Years Experience</div>
+                    <div className="font-semibold text-foreground">50% Cost Savings</div>
+                    <div className="text-sm text-muted-foreground">vs traditional methods</div>
                   </div>
                 </div>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: -20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.5 }}
-                className="absolute -top-6 -right-6 glass-card p-5 rounded-xl border border-cyan/20 shadow-2xl"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-cyan/20 flex items-center justify-center">
-                    <Cpu className="w-5 h-5 text-cyan" />
-                  </div>
-                  <div>
-                    <div className="text-xl font-display font-bold text-white">AI-Powered</div>
-                    <div className="text-xs text-white/60">Data Processing</div>
-                  </div>
-                </div>
-              </motion.div>
-
-              {/* Animated Drone Icon */}
-              <motion.div
-                className="absolute top-1/4 right-1/4"
-                animate={{
-                  y: [-10, 10, -10],
-                  rotate: [-2, 2, -2],
-                }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              >
-                <Radio className="w-8 h-8 text-cyan/40" />
               </motion.div>
             </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Why Choose Us - Dark Section */}
+      <section className="py-24 bg-foreground text-background relative overflow-hidden">
+        <div className="absolute inset-0 tech-grid opacity-30" />
+        
+        <div className="container mx-auto px-4 relative z-10">
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <span className="text-accent font-semibold text-sm uppercase tracking-wider">Why Cyanis</span>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-display font-bold mt-3 mb-4">
+              The Cyanis Advantage
+            </h2>
+            <p className="text-background/70 text-lg max-w-2xl mx-auto">
+              We combine cutting-edge technology with certified expertise to deliver 
+              unmatched aerial data solutions.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              { icon: Shield, title: 'Certified & Insured', description: 'FAA Part 107 certified pilots with comprehensive liability coverage for every mission.' },
+              { icon: Clock, title: '24hr Turnaround', description: 'Fast delivery without compromising quality. Most projects delivered within 24 hours.' },
+              { icon: Award, title: 'Enterprise Quality', description: 'Industry-standard deliverables compatible with all major CAD and GIS platforms.' },
+            ].map((item, index) => (
+              <motion.div
+                key={item.title}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="text-center p-8 rounded-2xl bg-background/5 border border-background/10 hover:bg-background/10 transition-all"
+              >
+                <div className="w-14 h-14 rounded-xl bg-accent/20 flex items-center justify-center mx-auto mb-6">
+                  <item.icon className="w-7 h-7 text-accent" />
+                </div>
+                <h3 className="text-xl font-display font-semibold mb-3">{item.title}</h3>
+                <p className="text-background/60 leading-relaxed">{item.description}</p>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-28 bg-background relative overflow-hidden">
-        {/* Background Effects */}
-        <div className="absolute inset-0 tech-grid opacity-20" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[500px] radial-glow opacity-40" />
-        
-        <div className="container mx-auto px-4 relative z-10">
-          <motion.div 
-            className="text-center max-w-3xl mx-auto"
+      <section className="py-24 bg-background">
+        <div className="container mx-auto px-4">
+          <motion.div
+            className="max-w-4xl mx-auto text-center bg-secondary/50 rounded-3xl p-12 md:p-16 border border-border"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
           >
-            <motion.span 
-              className="inline-block px-4 py-1.5 rounded-full bg-cyan/10 text-cyan font-semibold tracking-wide uppercase text-sm mb-6"
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-            >
-              Get Started Today
-            </motion.span>
-            <h2 className="text-3xl md:text-5xl font-display font-bold text-foreground mb-6 leading-tight">
-              Ready to <span className="gradient-text">Elevate</span> Your Project?
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-foreground mb-6">
+              Ready to Transform Your Operations?
             </h2>
-            <p className="text-muted-foreground text-lg mb-10 leading-relaxed">
-              Get in touch today for a free consultation and discover how our drone 
-              services can transform your operations and save you time and money.
+            <p className="text-muted-foreground text-lg mb-10 max-w-2xl mx-auto">
+              Schedule a free consultation and see how our drone services can save you 
+              time, reduce costs, and provide insights you never knew you needed.
             </p>
-            <motion.div 
-              className="flex flex-col sm:flex-row gap-4 justify-center"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/contact">
-                <Button size="lg" className="bg-accent hover:bg-cyan-dark text-accent-foreground px-8 py-6 text-lg font-semibold btn-glow group">
-                  Get Your Free Quote
+                <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground px-10 py-6 text-lg font-semibold btn-glow group">
+                  Book a Demo
                   <ArrowRight className="ml-2 w-5 h-5 transition-transform group-hover:translate-x-1" />
                 </Button>
               </Link>
               <a href="tel:9184759378">
-                <Button size="lg" variant="outline" className="border-2 border-muted-foreground/30 hover:border-cyan/50 hover:text-cyan px-8 py-6 text-lg">
+                <Button size="lg" variant="outline" className="px-10 py-6 text-lg">
                   Call (918) 475-9378
                 </Button>
               </a>
-            </motion.div>
+            </div>
           </motion.div>
         </div>
-
-        {/* Decorative Corner Elements */}
-        <div className="absolute bottom-0 left-0 w-40 h-40 border-l border-b border-cyan/10 rounded-bl-3xl" />
-        <div className="absolute top-0 right-0 w-40 h-40 border-r border-t border-cyan/10 rounded-tr-3xl" />
       </section>
     </Layout>
   );
