@@ -67,15 +67,16 @@ const features = [
 const Index = () => {
   return (
     <Layout>
-      {/* Hero Section */}
+      {/* Hero Section - Compact */}
       <Hero
         subtitle="Professional UAS Services"
-        title="Elevate Your Perspective with Precision Aerial Solutions"
-        description="From 3D modeling to precision mapping, we deliver cutting-edge drone technology for industries across Oklahoma. Safe, certified, and cost-effective."
+        title="Precision Aerial Solutions"
+        description="Cutting-edge drone technology for 3D modeling, mapping, and inspections across Oklahoma."
         ctaText="Request a Quote"
         ctaLink="/contact"
         secondaryCtaText="Our Services"
         secondaryCtaLink="/services"
+        compact={true}
       />
 
       {/* Stats Section with Tech Grid */}
