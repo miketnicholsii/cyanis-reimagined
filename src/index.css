@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -32,7 +34,15 @@
     --input: 210 20% 88%;
     --ring: 195 85% 42%;
     
-    --radius: 0.5rem;
+    --radius: 0.75rem;
+    
+    /* Cyanis Brand Colors */
+    --navy: 220 40% 13%;
+    --navy-light: 220 35% 20%;
+    --navy-dark: 220 45% 8%;
+    --cyan: 190 95% 45%;
+    --cyan-light: 185 90% 55%;
+    --cyan-dark: 195 95% 35%;
     
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -45,23 +55,23 @@
   }
 
   .dark {
-    --background: 220 25% 6%;
+    --background: 220 30% 5%;
     --foreground: 210 20% 98%;
     
-    --card: 220 25% 9%;
+    --card: 220 30% 8%;
     --card-foreground: 210 20% 98%;
     
-    --popover: 220 25% 9%;
+    --popover: 220 30% 8%;
     --popover-foreground: 210 20% 98%;
     
     --primary: 190 95% 50%;
-    --primary-foreground: 220 25% 6%;
+    --primary-foreground: 220 30% 5%;
     
-    --secondary: 220 20% 14%;
+    --secondary: 220 25% 12%;
     --secondary-foreground: 210 20% 95%;
     
-    --muted: 220 18% 16%;
-    --muted-foreground: 215 15% 60%;
+    --muted: 220 20% 14%;
+    --muted-foreground: 215 15% 55%;
     
     --accent: 190 95% 48%;
     --accent-foreground: 220 30% 8%;
@@ -69,17 +79,24 @@
     --destructive: 0 75% 55%;
     --destructive-foreground: 0 0% 100%;
     
-    --border: 220 18% 18%;
-    --input: 220 18% 18%;
+    --border: 220 20% 16%;
+    --input: 220 20% 16%;
     --ring: 190 95% 50%;
     
-    --sidebar-background: 220 25% 8%;
+    --navy: 220 40% 13%;
+    --navy-light: 220 35% 20%;
+    --navy-dark: 220 45% 6%;
+    --cyan: 190 95% 48%;
+    --cyan-light: 185 90% 58%;
+    --cyan-dark: 195 95% 38%;
+    
+    --sidebar-background: 220 30% 7%;
     --sidebar-foreground: 210 20% 98%;
     --sidebar-primary: 190 95% 50%;
-    --sidebar-primary-foreground: 220 25% 6%;
-    --sidebar-accent: 220 20% 14%;
+    --sidebar-primary-foreground: 220 30% 5%;
+    --sidebar-accent: 220 25% 12%;
     --sidebar-accent-foreground: 210 20% 98%;
-    --sidebar-border: 220 18% 18%;
+    --sidebar-border: 220 20% 16%;
     --sidebar-ring: 190 95% 50%;
   }
 }
@@ -91,28 +108,39 @@
   
   body {
     @apply bg-background text-foreground antialiased;
+    font-feature-settings: "cv11", "ss01";
   }
   
   html {
     scroll-behavior: smooth;
   }
-}
 
-@layer base {
-  * {
-    @apply border-border;
-  }
-
-  body {
-    @apply bg-background text-foreground antialiased;
-  }
-
-  html {
-    scroll-behavior: smooth;
+  /* Custom selection color */
+  ::selection {
+    background-color: hsl(var(--cyan) / 0.3);
+    color: hsl(var(--foreground));
   }
 }
 
 @layer components {
+  /* Glassmorphism card */
+  .glass-card {
+    @apply backdrop-blur-xl border border-white/10;
+    background: linear-gradient(
+      135deg,
+      hsl(var(--card) / 0.8) 0%,
+      hsl(var(--card) / 0.4) 100%
+    );
+  }
+
+  /* Tech grid pattern overlay */
+  .tech-grid {
+    background-image: 
+      linear-gradient(to right, hsl(var(--cyan) / 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(var(--cyan) / 0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
   /* Animated section - fade in on scroll */
   .animate-on-scroll {
     opacity: 0;
@@ -127,18 +155,20 @@
 
   /* Service card hover effects */
   .service-card {
-    @apply relative overflow-hidden transition-all duration-300;
-  }
-
-  .service-card:hover {
-    @apply -translate-y-2;
-    box-shadow: var(--shadow-lg);
+    @apply relative overflow-hidden transition-all duration-500;
   }
 
   .service-card::before {
     content: '';
-    @apply absolute inset-0 opacity-0 transition-opacity duration-300;
-    background: linear-gradient(135deg, hsl(var(--cyan) / 0.1) 0%, transparent 100%);
+    @apply absolute inset-0 opacity-0 transition-opacity duration-500;
+    background: linear-gradient(135deg, hsl(var(--cyan) / 0.1) 0%, transparent 60%);
+  }
+
+  .service-card:hover {
+    @apply -translate-y-2;
+    box-shadow: 
+      0 20px 40px -15px hsl(var(--cyan) / 0.2),
+      0 0 0 1px hsl(var(--cyan) / 0.1);
   }
 
   .service-card:hover::before {
@@ -147,50 +177,100 @@
 
   /* Icon container animation */
   .icon-container {
-    @apply transition-all duration-300;
+    @apply transition-all duration-500 relative overflow-hidden;
+  }
+
+  .icon-container::after {
+    content: '';
+    @apply absolute inset-0 opacity-0 transition-opacity duration-500;
+    background: radial-gradient(circle at center, hsl(var(--cyan) / 0.3) 0%, transparent 70%);
   }
 
   .service-card:hover .icon-container {
     @apply scale-110;
-    color: hsl(var(--cyan));
+  }
+
+  .service-card:hover .icon-container::after {
+    @apply opacity-100;
   }
 
   /* Gradient text */
   .gradient-text {
-    background: linear-gradient(135deg, hsl(var(--cyan)) 0%, hsl(var(--cyan-light)) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, hsl(var(--cyan)) 0%, hsl(var(--cyan-light)) 50%, hsl(var(--cyan)) 100%);
+    background-size: 200% 200%;
+    animation: border-flow 3s ease infinite;
   }
 
-  /* Hero gradient overlay - darker for better text contrast */
+  /* Hero gradient overlay - cinematic look */
   .hero-overlay {
     background: linear-gradient(
       180deg,
-      rgba(10, 15, 25, 0.88) 0%,
-      rgba(10, 15, 25, 0.75) 50%,
-      rgba(10, 15, 25, 0.92) 100%
+      hsla(220, 45%, 6%, 0.92) 0%,
+      hsla(220, 45%, 8%, 0.75) 40%,
+      hsla(220, 45%, 6%, 0.85) 100%
+    );
+  }
+
+  /* Radial glow effect */
+  .radial-glow {
+    background: radial-gradient(
+      ellipse at center,
+      hsl(var(--cyan) / 0.15) 0%,
+      transparent 60%
     );
   }
 
   /* Button glow effect */
   .btn-glow {
+    @apply relative overflow-hidden transition-all duration-300;
+    box-shadow: 0 0 20px hsl(var(--cyan) / 0.3);
+  }
+
+  .btn-glow:hover {
+    box-shadow: 0 0 30px hsl(var(--cyan) / 0.5), 0 0 60px hsl(var(--cyan) / 0.2);
+    transform: translateY(-2px);
+  }
+
+  .btn-glow::before {
+    content: '';
+    @apply absolute inset-0 opacity-0 transition-opacity duration-300;
+    background: linear-gradient(135deg, hsl(var(--cyan-light) / 0.2) 0%, transparent 50%);
+  }
+
+  .btn-glow:hover::before {
+    @apply opacity-100;
+  }
+
+  /* Shimmer effect for loading states */
+  .shimmer {
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      hsl(var(--cyan) / 0.1) 50%,
+      transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+  }
+
+  /* Scan line effect */
+  .scan-line {
     @apply relative overflow-hidden;
   }
 
-  .btn-glow::after {
+  .scan-line::after {
     content: '';
-    @apply absolute inset-0 opacity-0 transition-opacity duration-300;
-    box-shadow: var(--shadow-cyan);
-  }
-
-  .btn-glow:hover::after {
-    @apply opacity-100;
+    @apply absolute inset-x-0 h-px;
+    background: linear-gradient(90deg, transparent, hsl(var(--cyan)), transparent);
+    animation: scan 3s ease-in-out infinite;
   }
 
   /* Sticky header styles */
   .header-scrolled {
-    @apply bg-background/95 backdrop-blur-md shadow-sm;
+    @apply backdrop-blur-xl shadow-lg;
+    background: hsl(var(--background) / 0.85);
+    border-bottom: 1px solid hsl(var(--border) / 0.5);
   }
 
   /* Mobile menu animation */
@@ -208,20 +288,102 @@
       transform: translateY(0);
     }
   }
+
+  /* Animated border */
+  .animated-border {
+    @apply relative;
+  }
+
+  .animated-border::before {
+    content: '';
+    @apply absolute -inset-px rounded-xl opacity-0 transition-opacity duration-500;
+    background: linear-gradient(
+      90deg,
+      hsl(var(--cyan)),
+      hsl(var(--cyan-light)),
+      hsl(var(--cyan))
+    );
+    background-size: 200% 100%;
+    animation: border-flow 3s ease infinite;
+    z-index: -1;
+  }
+
+  .animated-border:hover::before {
+    @apply opacity-100;
+  }
+
+  /* Stat number animation */
+  .stat-number {
+    @apply font-display font-bold;
+    background: linear-gradient(135deg, hsl(var(--cyan)) 0%, hsl(var(--cyan-light)) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Floating element */
+  .float-element {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  /* Drone icon specific animation */
+  .drone-float {
+    animation: drone-hover 4s ease-in-out infinite;
+  }
+
+  /* Glowing dot */
+  .glow-dot {
+    @apply relative;
+  }
+
+  .glow-dot::after {
+    content: '';
+    @apply absolute inset-0 rounded-full;
+    background: hsl(var(--cyan));
+    animation: ping-slow 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+
+  /* Section divider */
+  .section-divider {
+    @apply h-px w-full;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      hsl(var(--cyan) / 0.3) 50%,
+      transparent 100%
+    );
+  }
+
+  /* Feature highlight */
+  .feature-highlight {
+    @apply relative pl-4;
+  }
+
+  .feature-highlight::before {
+    content: '';
+    @apply absolute left-0 top-0 bottom-0 w-1 rounded-full;
+    background: linear-gradient(180deg, hsl(var(--cyan)) 0%, hsl(var(--cyan-light)) 100%);
+  }
 }
 
 @layer utilities {
   /* Delay utilities for staggered animations */
-  .delay-100 {
-    animation-delay: 100ms;
+  .delay-100 { animation-delay: 100ms; }
+  .delay-200 { animation-delay: 200ms; }
+  .delay-300 { animation-delay: 300ms; }
+  .delay-400 { animation-delay: 400ms; }
+  .delay-500 { animation-delay: 500ms; }
+  .delay-600 { animation-delay: 600ms; }
+  .delay-700 { animation-delay: 700ms; }
+  .delay-800 { animation-delay: 800ms; }
+
+  /* Text shadow for hero */
+  .text-shadow {
+    text-shadow: 0 2px 10px hsl(var(--navy-dark) / 0.5);
   }
-  .delay-200 {
-    animation-delay: 200ms;
-  }
-  .delay-300 {
-    animation-delay: 300ms;
-  }
-  .delay-400 {
-    animation-delay: 400ms;
+
+  /* Backdrop blur utilities */
+  .backdrop-blur-xs {
+    backdrop-filter: blur(2px);
   }
 }
