@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Play, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, Play, CheckCircle2, Volume2, VolumeX } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 interface HeroProps {
@@ -15,6 +15,7 @@ interface HeroProps {
   showToggle?: boolean;
   showBadges?: boolean;
   compact?: boolean;
+  showVideo?: boolean;
 }
 
 const Hero = ({
@@ -28,8 +29,11 @@ const Hero = ({
   showToggle = true,
   showBadges = true,
   compact = false,
+  showVideo = false,
 }: HeroProps) => {
   const [activeView, setActiveView] = useState<'exterior' | 'interior'>('exterior');
+  const [isMuted, setIsMuted] = useState(true);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   const images = {
     exterior: 'https://images.pexels.com/photos/442587/pexels-photo-442587.jpeg?auto=compress&cs=tinysrgb&w=1200',
@@ -41,6 +45,22 @@ const Hero = ({
     'Fully Insured',
     '24hr Turnaround',
   ];
+
+  // Drone demo video URL (royalty-free drone footage)
+  const videoUrl = 'https://videos.pexels.com/video-files/2611150/2611150-uhd_2560_1440_30fps.mp4';
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.playbackRate = 0.8;
+    }
+  }, []);
+
+  const toggleMute = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !isMuted;
+      setIsMuted(!isMuted);
+    }
+  };
 
   return (
     <section className={`relative ${compact ? 'pt-28 pb-16' : 'pt-32 pb-20'} bg-background overflow-hidden`}>
@@ -141,8 +161,8 @@ const Hero = ({
             transition={{ duration: 0.6, delay: 0.2 }}
             className="relative"
           >
-            {/* Toggle Tabs */}
-            {showToggle && (
+            {/* Toggle Tabs - only show when not video mode */}
+            {showToggle && !showVideo && (
               <div className="flex gap-2 mb-4">
                 {(['exterior', 'interior'] as const).map((view) => (
                   <button
@@ -162,24 +182,58 @@ const Hero = ({
 
             {/* Main Image/Video Container */}
             <div className="relative rounded-2xl overflow-hidden bg-secondary aspect-[4/3] shadow-2xl">
-              <motion.img
-                key={activeView}
-                src={images[activeView]}
-                alt="Drone capture preview"
-                className="w-full h-full object-cover"
-                initial={{ opacity: 0, scale: 1.05 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.4 }}
-              />
+              {showVideo ? (
+                <>
+                  <video
+                    ref={videoRef}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="w-full h-full object-cover"
+                  >
+                    <source src={videoUrl} type="video/mp4" />
+                  </video>
+                  
+                  {/* Video gradient overlay for text readability */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20 pointer-events-none" />
+                  
+                  {/* Mute toggle button */}
+                  <motion.button
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 1 }}
+                    onClick={toggleMute}
+                    className="absolute bottom-24 right-4 z-10 w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white hover:bg-black/70 transition-colors"
+                    aria-label={isMuted ? 'Unmute' : 'Mute'}
+                  >
+                    {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
+                  </motion.button>
+                </>
+              ) : (
+                <motion.img
+                  key={activeView}
+                  src={images[activeView]}
+                  alt="Drone capture preview"
+                  className="w-full h-full object-cover"
+                  initial={{ opacity: 0, scale: 1.05 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.4 }}
+                />
+              )}
 
               {/* UI Overlay - Software Style */}
               <div className="absolute inset-0 pointer-events-none">
                 {/* Top toolbar */}
                 <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-green-500" />
+                    <motion.div 
+                      className="w-3 h-3 rounded-full bg-green-500"
+                      animate={{ scale: [1, 1.2, 1] }}
+                      transition={{ repeat: Infinity, duration: 2 }}
+                    />
                     <span className="text-white text-xs font-medium bg-black/40 backdrop-blur-sm px-2 py-1 rounded">
-                      Live Preview
+                      {showVideo ? 'Live Demo' : 'Live Preview'}
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
@@ -201,15 +255,15 @@ const Hero = ({
                 >
                   <div className="bg-black/50 backdrop-blur-md rounded-xl p-4 text-white">
                     <div className="flex items-center justify-between text-xs mb-2">
-                      <span className="text-white/70">Processing Status</span>
-                      <span className="text-accent font-medium">Complete</span>
+                      <span className="text-white/70">{showVideo ? 'Drone Flight Status' : 'Processing Status'}</span>
+                      <span className="text-accent font-medium">{showVideo ? 'Recording' : 'Complete'}</span>
                     </div>
                     <div className="h-1.5 bg-white/20 rounded-full overflow-hidden">
                       <motion.div
                         className="h-full bg-accent rounded-full"
                         initial={{ width: '0%' }}
-                        animate={{ width: '100%' }}
-                        transition={{ delay: 0.8, duration: 1.5, ease: "easeOut" }}
+                        animate={{ width: showVideo ? ['0%', '100%', '0%'] : '100%' }}
+                        transition={showVideo ? { repeat: Infinity, duration: 3, ease: "linear" } : { delay: 0.8, duration: 1.5, ease: "easeOut" }}
                       />
                     </div>
                   </div>
@@ -220,6 +274,16 @@ const Hero = ({
                 <div className="absolute top-8 right-8 w-8 h-8 border-r-2 border-t-2 border-accent/60" />
                 <div className="absolute bottom-20 left-8 w-8 h-8 border-l-2 border-b-2 border-accent/60" />
                 <div className="absolute bottom-20 right-8 w-8 h-8 border-r-2 border-b-2 border-accent/60" />
+                
+                {/* Scan line animation for video */}
+                {showVideo && (
+                  <motion.div
+                    className="absolute left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-accent to-transparent"
+                    initial={{ top: '10%' }}
+                    animate={{ top: ['10%', '80%', '10%'] }}
+                    transition={{ repeat: Infinity, duration: 4, ease: "linear" }}
+                  />
+                )}
               </div>
             </div>
 

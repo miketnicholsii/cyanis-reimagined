@@ -87,6 +87,7 @@ const Index = () => {
         ctaLink="/contact"
         secondaryCtaText="Watch Demo"
         secondaryCtaLink="/services"
+        showVideo={true}
       />
 
       {/* Trust Logos */}
